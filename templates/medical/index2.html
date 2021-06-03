@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <title>疾病分析</title>
+    <script src="{% static 'js/jquery-2.2.1.min.js' %}"></script>
+    <script src="{% static 'js/rem.js' %}"></script>
+    <script src="{% static 'js/echarts.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/echarts.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-3.5.1.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/echarts-wordcloud.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/nane_dingwei.js' %}"></script>
+    <style>
+        .nav{
+        position=relative;
+
+
+}
+        a{
+width: 8%;
+padding-top: 10px;
+font-size: 30px;
+color: #fff;
+text-align: center;
+display: block;
+float: left;
+margin-left:180px;
+        }
+    </style>
+</head>
+<body>
+<div class="t_container">
+    <header class="t_h_bg">
+<!--        <span>疾病分析</span>-->
+        <div class="nav">
+    <span><a href="http://127.0.0.1:8000/myapp/xy/%%20url%20'show'%20%"  >首页</a><a href="http://127.0.0.1:8000/myapp/gl/">趋势分析</a><a href="http://127.0.0.1:8000/myapp/hh/">疾病分析</a><a href="http://127.0.0.1:8000/myapp/show/">指标分析</a><a href="http://127.0.0.1:8000/myapp/zhunbei_predict/">就诊预测</a></span>
+</div>
+    </header>
+    <main class="t_main">
+        <div class="t_box">
+                    <p style="font-size:18px ;color:#ffffff">历年医院疾病top3排名</p>
+            {#2018年2017年医院top10#}
+            <div class="zhutu1" style="font-size:0.5px">
+                <form action="{% url 'hh' %}" method="post">
+
+
+                    <b style="color: #ffffff">医院名称</b>
+                    <select name="name" style="font-size:0.5px" id="name1">
+                        <option value="济南市儿童医院">济南市儿童医院</option>
+                        <option value="济南市第四人民医院">济南市第四人民医院</option>
+                    </select>
+                    {#            </fieldset>#}
+                    <input type="submit" style="font-size:0.5px" value="查询">
+                    {#            </fieldset>#}
+                </form>
+            </div>
+            <div id="hospital1" style="width:800px;height:300px;"></div>
+            <script type="text/javascript">
+                var Mychart = echarts.init(document.getElementById("hospital1"));
+
+                var arr1 = []
+                var data1 = {{ hospital_2017_name|safe }};
+                var arr2 = [];
+                var data2 ={{ hospital_2018_name|safe }};
+                var val2 = [];
+                var val1 = [];
+                var value1 = {{ hospital_2017_value|safe }};
+                var value2 = {{ hospital_2018_value|safe }}
+                    arr1 = data1;
+                arr2 = data2;
+                val1 = value1;
+                val2 = value2
+                console.log(arr2)
+                console.log(val2)
+                option = {
+
+                    legend: {
+                        data: [{
+                            name: '2017年'
+                        }, {
+                            name: '2018年'
+                        }],
+
+                        itemGap: 32, // 设置间距
+                        textStyle: {
+                            color: '#fff',
+                            fontSize: 15,
+                            fontFamily: 'PingFangSC',
+                            fontWeight: 300
+                        }
+                    },
+                    grid:
+                        [
+                            {
+                                containLabel: true,
+                                top: 16, //上边距
+                                height: 400,
+                                width: '80%'
+                            },
+                            {
+                                containLabel: true,
+                                top: 36, //上边距
+                                height: 400,
+                                width: '80%'
+                            },
+                            {
+                                containLabel: true,
+                                top: 16, //上边距
+                                height: 420,
+                                width: '80%'
+                            },
+                            {
+                                containLabel: true,
+                                top: 16, //上边距
+                                height: 420,
+                                width: '80%'
+                            }
+                        ],
+                    xAxis: [
+                        {
+                            gridIndex: 0,
+                            max: 130000,
+                            splitNumber: 8,
+                            show: false,
+                            axisLine: {
+                                lineStyle: {
+                                    color: '#10899A'
+                                }
+                            },
+                            axisTick: {
+                                show: false,
+                                inside: true,
+                                lineStyle: {
+                                    color: '#10899A',
+                                    fontSize: 10,
+                                    fontFamily: 'PingFangSC',
+                                    fontWeight: 300
+                                }
+                            },
+                            splitLine: {
+                                show: false
+                            },
+                            axisLabel: {
+                                formatter: (params) => {
+                                    return '{marginTop|' + params + '}';
+                                },
+                                rich: {
+                                    marginTop: {
+                                        padding: [0, 0, 0, 0],
+                                        color: '#06D3CD',
+                                        fontSize: 10,
+                                        fontFamily: 'PingFangSC',
+                                        fontWeight: 300
+
+                                    }
+                                }
+                            },
+                        },
+                        {
+                            max: 130000,
+                            show: false,
+                            gridIndex: 1,
+                            splitNumber: 8,
+                            inverse: true,
+                            axisLine: {
+                                lineStyle: {
+                                    color: '#10899A'
+                                }
+                            },
+                            axisTick: {
+                                show: false,
+                                inside: true,
+                                lineStyle: {
+                                    color: '#10899A',
+                                    fontSize: 10,
+                                    fontFamily: 'PingFangSC',
+                                    fontWeight: 300
+                                }
+                            },
+                            splitLine: {
+                                show: false
+                            },
+                            axisLabel: {
+                                formatter: (params) => {
+                                    return '{marginTop|' + params + '}';
+                                },
+                                rich: {
+                                    marginTop: {
+                                        padding: [0, 0, 0, 0],
+                                        color: '#06D3CD',
+                                        fontSize: 10,
+                                        fontFamily: 'PingFangSC',
+                                        fontWeight: 300
+
+                                    }
+                                }
+                            },
+                        },
+                        {
+                            max: 130000,
+                            show: false,
+                            gridIndex: 2,
+                            splitNumber: 8,
+                            axisLine: {
+                                lineStyle: {
+                                    color: '#10899A'
+                                }
+                            },
+                            axisTick: {
+                                show: false,
+                                inside: true,
+                                lineStyle: {
+                                    color: '#10899A',
+                                    fontSize: 10,
+                                    fontFamily: 'PingFangSC',
+                                    fontWeight: 300
+                                }
+                            },
+                            splitLine: {
+                                show: false
+                            },
+                            axisLabel: {
+                                formatter: (params) => {
+                                    return '{marginTop|' + params + '}';
+                                },
+                                rich: {
+                                    marginTop: {
+                                        padding: [0, 0, 0, 0],
+                                        color: '#06D3CD',
+                                        fontSize: 10,
+                                        fontFamily: 'PingFangSC',
+                                        fontWeight: 300
+
+                                    }
+                                }
+                            },
+                        },
+                        {
+                            max: 130000,
+                            show: false,
+                            gridIndex: 3,
+                            splitNumber: 8,
+                            axisLine: {
+                                lineStyle: {
+                                    color: '#10899A'
+                                }
+                            },
+                            axisTick: {
+                                show: false,
+                                inside: true,
+                                lineStyle: {
+                                    color: '#10899A',
+                                    fontSize: 10,
+                                    fontFamily: 'PingFangSC',
+                                    fontWeight: 300
+                                }
+                            },
+                            splitLine: {
+                                show: false
+                            },
+                            axisLabel: {
+                                formatter: (params) => {
+                                    return '{marginTop|' + params + '}';
+                                },
+                                rich: {
+                                    marginTop: {
+                                        padding: [0, 0, 0, 0],
+                                        color: '#06D3CD',
+                                        fontSize: 10,
+                                        fontFamily: 'PingFangSC',
+                                        fontWeight: 300
+
+                                    }
+                                }
+                            },
+                        },
+                    ],
+                    yAxis: [
+                        {
+                            gridIndex: 0,
+                            position: 'left',
+                            data: arr1,
+                            nameTextStyle: {
+                                color: '#32353C',
+                                padding: [0, 0, 0, 8],
+                                fontSize: 8,
+                                fontFamily: 'PingFangSC',
+                                fontWeight: 300
+                            },
+                            axisLabel: {
+                                formatter: (params) => {
+                                    return '{marginTop|' + params + '}';
+                                },
+                                margin: 10,
+                                rich: {
+                                    marginTop: {
+                                        padding: [0, 0, 0, 0],
+                                        color: '#fff',
+                                        fontSize: 13,
+                                        fontFamily: 'PingFangSC',
+                                        fontWeight: 300
+                                    }
+                                }
+                            },
+                            axisTick: {
+                                show: false
+                            },
+                            axisLine: {
+                                show: false,
+                                lineStyle: {
+                                    color: '#10899A'
+                                }
+                            },
+                            splitLine: {
+                                show: false,
+                            }
+
+                        },
+                        {
+                            gridIndex: 1,
+                            data: arr2,
+                            position: 'right',
+                            nameTextStyle: {
+                                color: '#32353C',
+                                padding: [0, 0, 0, 8],
+                                fontSize: 10,
+                                fontFamily: 'PingFangSC',
+                                fontWeight: 300
+                            },
+                            top: 12,
+                            axisLabel: {
+                                formatter: (params) => {
+                                    return '{marginTop|' + params + '}';
+                                },
+                                rich: {
+                                    marginTop: {
+                                        padding: [0, 0, 0, 0],
+                                        color: '#fff',
+                                        fontSize: 13,
+                                        fontFamily: 'PingFangSC',
+                                        fontWeight: 300
+
+                                    }
+                                },
+
+                            },
+                            axisTick: {
+                                show: false
+                            },
+                            axisLine: {
+                                show: false,
+                                lineStyle: {
+                                    color: '#10899A'
+                                }
+                            },
+                            splitLine: {
+                                show: false,
+                            }
+                        },
+                        {
+                            gridIndex: 2,
+                            axisLabel: {
+                                formatter: (params) => {
+                                    return '{marginTop|' + params + '}';
+                                },
+                                rich: {
+                                    marginTop: {
+                                        padding: [0, 0, 0, 0],
+                                        color: '#06D3CD',
+                                        fontSize: 10,
+                                        fontFamily: 'PingFangSC',
+                                        fontWeight: 300
+                                    }
+                                }
+                            },
+                            axisTick: {
+                                show: false
+                            },
+                            axisLine: {
+                                show: true,
+                                lineStyle: {
+                                    color: '#32353C'
+                                }
+                            },
+                            splitLine: {
+                                show: false,
+                            }
+
+                        },
+                        {
+                            gridIndex: 2,
+                            position: 'right',
+                            axisLabel: {
+                                formatter: (params) => {
+                                    return '{marginTop|' + params + '}';
+                                },
+                                rich: {
+                                    marginTop: {
+                                        padding: [0, 0, 0, 0],
+                                        color: '#06D3CD',
+                                        fontSize: 10,
+                                        fontFamily: 'PingFangSC',
+                                        fontWeight: 300
+
+                                    }
+                                },
+
+                            },
+                            axisTick: {
+                                show: false
+                            },
+                            axisLine: {
+                                show: true,
+                                lineStyle: {
+                                    color: '#32353C'
+                                }
+                            },
+                            splitLine: {
+                                show: false,
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '2017年',
+                            type: 'bar',
+                            label: {
+                                normal: {
+                                    show: true,
+                                    baseline: 'middle',
+                                    fontSize: 10,
+                                    fontWeight: '400',
+                                    position: 'insideLeft',
+                                    color: '#fff',
+                                    lineHeight: 14,
+                                    padding: [0, 12, 0, 12]
+                                }
+                            },
+                            itemStyle: {
+                                barBorderRadius: 10,
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{
+                                    offset: 0,
+                                    color: 'rgba(8,117,255)'
+                                },
+                                    {
+                                        offset: 1,
+                                        color: '#6DE667'
+                                    }
+                                ])
+                            },
+                            barWidth: 14,
+                            data: val1
+                        },
+                        {
+                            name: '2018年',
+                            type: 'bar',
+                            xAxisIndex: 1,
+                            yAxisIndex: 1,
+                            label: {
+                                normal: {
+                                    show: true,
+                                    baseline: 'middle',
+                                    fontSize: 10,
+                                    fontWeight: '400',
+                                    position: 'insideRight',
+                                    color: '#fff',
+                                    lineHeight: 14,
+                                    padding: [0, 12, 0, 12]
+                                }
+                            },
+                            itemStyle: {
+                                barBorderRadius: 10,
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{
+                                    offset: 0,
+                                    color: '#FCB344'
+                                },
+                                    {
+                                        offset: 1,
+                                        color: '#F64744'
+                                    }
+                                ])
+                            },
+                            barWidth: 14,
+                            data: val2,
+                        },
+
+                    ]
+                };
+
+                Mychart.setOption(option);
+
+            </script>
+        </div>
+
+
+        <div class="t_box">
+            <p style="font-size:18px ;color:#ffffff">2019年的疾病分析</p>
+    <div id="container2" style="width:800px;height:330px;"></div>
+            <script type="text/javascript">
+                var myChart = echarts.init(document.getElementById('container2'));
+			// var myContainer = echarts.init(container);
+				var option = {
+								dataZoom: [
+							{
+								type: 'slider',
+								show: true,
+								start: 20,
+								end: 0,
+								handleSize: 8,
+								textStyle: {
+									color: "#2f89cf",
+								}
+							},
+							{
+								type: 'inside',
+								start: 94,
+								end: 100,
+
+							},
+						],
+					legend: {
+					textStyle: {
+									color: "#fff"
+								}
+								},
+					tooltip: {
+					},
+					dataset: {
+
+						dimensions: ['product', '发热', '肺炎', '高血压','支气管炎','糖尿病','上呼吸道感染','健康查体','疱疹性咽峡炎','咳嗽',],
+						source: [
+									{product:'20190201','发热':644,'肺炎':301,'高血压':261},
+									{product:'20190202','发热':603,'肺炎':283,'支气管炎':268},
+									{product:'20190203','发热':535,'肺炎':286,'支气管炎':271},
+									{product:'20190204','发热':450,'肺炎':233,'支气管炎':158},
+									{product:'20190205','发热':493,'支气管炎':195,'肺炎':192},
+									{product:'20190206','发热':470,'肺炎':241,'支气管炎':213},
+									{product:'20190207','发热':433,'支气管炎':240,'肺炎':209},
+									{product:'20190208','发热':458,'肺炎':271,'支气管炎':250},
+									{product:'20190209','发热':434,'支气管炎':252,'肺炎':249},
+									{product:'20190210','发热':484,'肺炎':234,'支气管炎':212},
+									{product:'20190211','发热':421,'肺炎':261,'支气管炎':221},
+									{product:'20190212','发热':435,'肺炎':246,'支气管炎':217},
+									{product:'20190213','发热':377,'肺炎':216,'支气管炎':207},
+									{product:'20190214','发热':371,'肺炎':183,'支气管炎':181},
+									{product:'20190215','发热':328,'支气管炎':225,'肺炎':215},
+									{product:'20190216','发热':372,'肺炎':228,'支气管炎':223},
+									{product:'20190217','发热':391,'支气管炎':226,'肺炎':205},
+									{product:'20190218','发热':304,'高血压':242,'支气管炎':208},
+									{product:'20190219','发热':307,'肺炎':198,'支气管炎':194},
+									{product:'20190220','发热':335,'肺炎':177,'高血压':176},
+									{product:'20190221','发热':322,'肺炎':209,'高血压':200},
+									{product:'20190222','发热':350,'高血压':204,'肺炎':185},
+									{product:'20190223','发热':339,'肺炎':196,'支气管炎':171},
+									{product:'20190224','发热':328,'支气管炎':159,'肺炎':147},
+									{product:'20190225','发热':348,'高血压':258,'糖尿病':207},
+									{product:'20190226','发热':341,'糖尿病':206,'高血压':203},
+									{product:'20190227','发热':353,'高血压':191,'糖尿病':170},
+									{product:'20190228','发热':332,'高血压':172,'糖尿病':167},
+									{product:'20190501','发热':411,'支气管炎':180,'咳嗽':159},
+									{product:'20190502','发热':380,'支气管炎':186,'咳嗽':157},
+									{product:'20190503','发热':363,'支气管炎':203,'咳嗽':133},
+									{product:'20190504','发热':387,'支气管炎':199,'咳嗽':118},
+									{product:'20190505','发热':419,'糖尿病':212,'支气管炎':191},
+									{product:'20190506','发热':415,'高血压':250,'糖尿病':226},
+									{product:'20190507','发热':391,'支气管炎':237,'高血压':213},
+									{product:'20190508','发热':423,'支气管炎':209,'高血压':184},
+									{product:'20190509','发热':391,'支气管炎':187,'高血压':172},
+									{product:'20190510','发热':390,'糖尿病':194,'高血压':183},
+									{product:'20190511','发热':366,'支气管炎':217,'肺炎':132},
+									{product:'20190512','发热':398,'支气管炎':182,'咳嗽':159},
+									{product:'20190513','发热':384,'高血压':271,'糖尿病':223},
+									{product:'20190514','发热':461,'糖尿病':227,'支气管炎':206},
+									{product:'20190515','发热':535,'支气管炎':188,'糖尿病':187},
+									{product:'20190516','发热':424,'支气管炎':184,'高血压':153},
+									{product:'20190517','发热':455,'高血压':220,'支气管炎':183},
+									{product:'20190518','发热':425,'支气管炎':191,'咳嗽':154},
+									{product:'20190519','发热':396,'咳嗽':157,'支气管炎':152},
+									{product:'20190520','发热':440,'高血压':249,'糖尿病':224},
+									{product:'20190521','发热':418,'糖尿病':207,'高血压':201},
+									{product:'20190522','发热':421,'糖尿病':183,'高血压':181},
+									{product:'20190523','发热':389,'支气管炎':188,'高血压':156},
+									{product:'20190524','发热':396,'高血压':174,'支气管炎':171},
+									{product:'20190525','发热':430,'支气管炎':177,'健康查体':138},
+									{product:'20190526','发热':439,'咳嗽':172,'支气管炎':142},
+									{product:'20190527','发热':418,'高血压':243,'糖尿病':236},
+									{product:'20190528','发热':449,'支气管炎':212,'糖尿病':195},
+									{product:'20190529','发热':490,'支气管炎':188,'高血压':172},
+									{product:'20190530','发热':470,'支气管炎':186,'咳嗽':161},
+									{product:'20190531','发热':440,'支气管炎':186,'高血压':161},
+									{product:'20190801','发热':384,'支气管炎':213,'糖尿病':144},
+									{product:'20190802','发热':368,'支气管炎':232,'高血压':173},
+									{product:'20190803','发热':361,'支气管炎':231,'疱疹性咽峡炎':153},
+									{product:'20190804','发热':331,'支气管炎':200,'疱疹性咽峡炎':159},
+									{product:'20190805','发热':396,'糖尿病':223,'支气管炎':213},
+									{product:'20190806','发热':332,'支气管炎':211,'糖尿病':191},
+									{product:'20190807','发热':335,'支气管炎':189,'疱疹性咽峡炎':153},
+									{product:'20190808','发热':353,'支气管炎':206,'糖尿病':183},
+									{product:'20190809','发热':376,'高血压':206,'糖尿病':202},
+									{product:'20190810','发热':352,'支气管炎':184,'疱疹性咽峡炎':161},
+									{product:'20190811','发热':302,'疱疹性咽峡炎':140,'支气管炎':128},
+									{product:'20190812','发热':316,'外伤证':152,'支气管炎':147},
+									{product:'20190813','发热':336,'糖尿病':194,'支气管炎':188},
+									{product:'20190814','发热':298,'糖尿病':239,'高血压':209},
+									{product:'20190815','发热':288,'高血压':181,'糖尿病':169},
+									{product:'20190816','发热':314,'高血压':210,'糖尿病':182},
+									{product:'20190817','发热':296,'支气管炎':163,'外伤证':157},
+									{product:'20190818','发热':311,'支气管炎':174,'健康查体':141},
+									{product:'20190819','发热':294,'糖尿病':221,'支气管炎':214},
+									{product:'20190820','发热':298,'糖尿病':214,'高血压':203},
+									{product:'20190821','发热':357,'糖尿病':207,'支气管炎':171},
+									{product:'20190822','发热':298,'支气管炎':191,'高血压':159},
+									{product:'20190823','发热':287,'支气管炎':185,'高血压':176},
+									{product:'20190824','发热':268,'支气管炎':196,'外伤证':137},
+									{product:'20190825','发热':260,'支气管炎':197,'上呼吸道感染':150},
+									{product:'20190826','发热':289,'健康查体':218,'支气管炎':209},
+									{product:'20190827','发热':313,'支气管炎':213,'健康查体':196},
+									{product:'20190828','发热':298,'高血压':253,'糖尿病':248},
+									{product:'20190829','发热':282,'高血压':225,'糖尿病':214},
+									{product:'20190830','发热':306,'高血压':213,'支气管炎':208},
+									{product:'20190831','发热':295,'支气管炎':178,'健康查体':164},
+									{product:'20191101','支气管炎':292,'发热':229,'肺炎':181},
+									{product:'20191102','支气管炎':313,'发热':241,'咳嗽':195},
+									{product:'20191103','支气管炎':261,'发热':231,'咳嗽':200},
+									{product:'20191104','支气管炎':289,'糖尿病':250,'高血压':225},
+									{product:'20191105','支气管炎':356,'高血压':234,'糖尿病':224},
+									{product:'20191106','支气管炎':286,'糖尿病':206,'发热':203},
+									{product:'20191107','支气管炎':294,'发热':246,'肺炎':179},
+									{product:'20191108','支气管炎':308,'发热':240,'高血压':204},
+									{product:'20191109','支气管炎':353,'发热':257,'肺炎':174},
+									{product:'20191110','支气管炎':329,'发热':257,'咳嗽':210},
+									{product:'20191111','支气管炎':331,'高血压':243,'发热':242},
+									{product:'20191112','支气管炎':368,'发热':271,'糖尿病':225},
+									{product:'20191113','支气管炎':337,'发热':287,'肺炎':216},
+									{product:'20191114','支气管炎':309,'发热':274,'肺炎':250},
+									{product:'20191115','支气管炎':333,'发热':299,'肺炎':256},
+									{product:'20191116','支气管炎':369,'发热':254,'肺炎':237},
+									{product:'20191117','支气管炎':344,'肺炎':256,'发热':242},
+									{product:'20191118','支气管炎':353,'发热':267,'肺炎':252},
+									{product:'20191119','支气管炎':392,'发热':290,'肺炎':267},
+									{product:'20191120','支气管炎':366,'发热':268,'肺炎':263},
+									{product:'20191121','支气管炎':341,'发热':284,'肺炎':281},
+									{product:'20191122','发热':345,'支气管炎':331,'肺炎':301},
+									{product:'20191123','支气管炎':390,'肺炎':277,'发热':275},
+									{product:'20191124','支气管炎':352,'发热':306,'肺炎':290},
+									{product:'20191125','支气管炎':385,'发热':303,'肺炎':298},
+									{product:'20191126','支气管炎':372,'肺炎':330,'发热':294},
+									{product:'20191127','支气管炎':344,'发热':325,'肺炎':324},
+									{product:'20191128','支气管炎':397,'肺炎':358,'发热':314},
+									{product:'20191129','支气管炎':417,'发热':346,'肺炎':324},
+									{product:'20191130','支气管炎':398,'肺炎':379,'发热':320}
+
+						]
+					},
+					xAxis: {type: 'category',
+
+					axisLabel: {
+                         color: '#fff',
+
+                        },
+					},
+					yAxis: {axisLabel: {
+                         color: '#fff',
+
+                        },},
+					// Declare several bar series, each will be mapped
+					// to a column of dataset.source by default.
+					series: [
+						{type: 'bar'},
+						{type: 'bar'},
+						{type: 'bar'},
+						{type: 'bar'},
+						{type: 'bar'},
+						{type: 'bar'},
+						{type: 'bar'},
+						{type: 'bar'},
+
+					]
+				};
+
+			myChart.setOption(option);
+                </script>
+        </div>
+
+
+        <div class="t_box">
+            <p style="font-size:18px ;color:#ffffff">2020年的疾病分析</p>
+                <div id="container3" style="width:800px;height:330px;"></div>
+            <script type="text/javascript">
+                var myChart = echarts.init(document.getElementById('container3'));
+			// var myContainer = echarts.init(container);
+				var option = {
+								dataZoom: [
+							{
+								type: 'slider',
+								show: true,
+								start: 20,
+								end: 0,
+								handleSize: 8,
+								textStyle: {
+									color: "#2f89cf",
+								}
+							},
+							{
+								type: 'inside',
+								start: 94,
+								end: 100,
+
+							},
+						],
+
+					legend: {textStyle: {
+									color: "#fff",
+								}},
+					tooltip: {},
+					dataset: {
+						dimensions: ['product','湿疹','发热', '肺炎', '高血压','支气管炎','糖尿病','动物源性细菌性疾病','上呼吸道感染','急性上呼吸道感染','健康查体','妊娠状态','腹痛','咨询','未填写'],
+						source: [
+									{product:'20200301','肺炎':67,'上呼吸道感染':55,'发热':50},
+									{product:'20200302','高血压':133,'糖尿病':127,'肺炎':62},
+									{product:'20200303','高血压':116,'糖尿病':115,'肺炎':82},
+									{product:'20200304','糖尿病':100,'高血压':94,'妊娠状态':67},
+									{product:'20200305','糖尿病':77,'高血压':74,'上呼吸道感染':56},
+									{product:'20200306','糖尿病':99,'高血压':94,'发热':67},
+									{product:'20200307','肺炎':76,'发热':71,'上呼吸道感染':63},
+									{product:'20200308','发热':61,'动物源性细菌性疾病':60,'肺炎':59},
+									{product:'20200309','糖尿病':100,'高血压':78,'上呼吸道感染':75,},
+									{product:'20200310','高血压':134,'糖尿病':105,'上呼吸道感染':68},
+									{product:'20200311','高血压':91,'糖尿病':87,'妊娠状态':69},
+									{product:'20200312','上呼吸道感染':76,'高血压':65,'健康查体':62},
+									{product:'20200313','高血压':75,'上呼吸道感染':59,'肺炎':58},
+									{product:'20200314','上呼吸道感染':74,'动物源性细菌性疾病':68,'尿毒症':66},
+									{product:'20200315','上呼吸道感染':73,'肺炎':60,'健康查体':54},
+									{product:'20200316','高血压':103,'糖尿病':89,'上呼吸道感染':77},
+									{product:'20200317','高血压':112,'糖尿病':81,'咨询':62},
+									{product:'20200318','妊娠状态':81,'肺炎':74,'高血压':69},
+									{product:'20200319','肺炎':60,'上呼吸道感染':58,'高血压':57},
+									{product:'20200320','高血压':88,'上呼吸道感染':75,'健康查体':73},
+									{product:'20200321','上呼吸道感染':79,'尿毒症':62,'湿疹':61},
+									{product:'20200322','健康查体':70,'上呼吸道感染':67,'肺炎':59},
+									{product:'20200323','健康查体':101,'高血压':94,'糖尿病':87},
+									{product:'20200324','高血压':86,'糖尿病':82,'健康查体':72},
+									{product:'20200325','糖尿病':88,'高血压':85,'健康查体':75},
+									{product:'20200326','高血压':58,'健康查体':52,'咨询':44},
+									{product:'20200327','高血压':82,'健康查体':79,'上呼吸道感染':66},
+									{product:'20200328','健康查体':77,'上呼吸道感染':70,'尿毒症':62},
+									{product:'20200329','健康查体':73,'湿疹':64,'上呼吸道感染':62},
+									{product:'20200330','高血压':114,'糖尿病':95,'健康查体':81},
+									{product:'20200331','高血压':74,'妊娠状态':74,'糖尿病':70},
+									{product:'20200601','急性上呼吸道感染':117,'高血压':110,'糖尿病':108},
+									{product:'20200602','急性上呼吸道感染':147,'高血压':118,'糖尿病':114},
+									{product:'20200603','急性上呼吸道感染':142,'高血压':103,'健康查体':100},
+									{product:'20200604','急性上呼吸道感染':140,'健康查体':97,'高血压':96},
+									{product:'20200605','急性上呼吸道感染':154,'高血压':103,'健康查体':96},
+									{product:'20200606','急性上呼吸道感染':154,'健康查体':111,'未填写':78},
+									{product:'20200607','急性上呼吸道感染':159,'健康查体':103,'发热':80},
+									{product:'20200608','急性上呼吸道感染':224,'高血压':120,'健康查体':116},
+									{product:'20200609','高血压':112,'糖尿病':99,'上呼吸道感染':95},
+									{product:'20200610','高血压':97,'急性上呼吸道感染':89,'糖尿病':59},
+									{product:'20200611','急性上呼吸道感染':192,'健康查体':114,'腹痛':96},
+									{product:'20200612','急性上呼吸道感染':215,'健康查体':110,'腹痛':104},
+									{product:'20200613','急性上呼吸道感染':164,'健康查体':102,'支气管炎':100},
+									{product:'20200614','急性上呼吸道感染':217,'健康查体':113,'支气管炎':107},
+									{product:'20200615','急性上呼吸道感染':235,'健康查体':215,'发热':103},
+									{product:'20200616','急性上呼吸道感染':224,'健康查体':217,'支气管炎':114},
+									{product:'20200617','健康查体':207,'急性上呼吸道感染':176,'支气管炎':99},
+									{product:'20200618','急性上呼吸道感染':220,'健康查体':217,'腹痛':106},
+									{product:'20200619','健康查体':280,'急性上呼吸道感染':226,'支气管炎':114},
+									{product:'20200620','急性上呼吸道感染':173,'健康查体':161,'支气管炎':119},
+									{product:'20200621','急性上呼吸道感染':197,'健康查体':163,'支气管炎':128},
+									{product:'20200622','急性上呼吸道感染':198,'健康查体':197,'高血压':126},
+									{product:'20200623','急性上呼吸道感染':155,'健康查体':142,'高血压':105},
+									{product:'20200624','急性上呼吸道感染':177,'健康查体':167,'糖尿病':104},
+									{product:'20200625','健康查体':159,'急性上呼吸道感染':159,'支气管炎':88},
+									{product:'20200626','健康查体':164,'急性上呼吸道感染':149,'支气管炎':112},
+									{product:'20200627','急性上呼吸道感染':175,'健康查体':140,'支气管炎':109},
+									{product:'20200628','健康查体':151,'急性上呼吸道感染':131,'支气管炎':69},
+									{product:'20200629','健康查体':172,'急性上呼吸道感染':159,'高血压':127},
+									{product:'20200630','健康查体':204,'急性上呼吸道感染':126,'腹痛':96},
+						]
+					},
+					xAxis: {type: 'category',
+					axisLabel: {
+                         color: '#fff',
+
+                        }},
+					yAxis: {axisLabel: {
+                         color: '#fff',
+
+                        }},
+					// Declare several bar series, each will be mapped
+					// to a column of dataset.source by default.
+					series: [
+						{type: 'bar'},
+						{type: 'bar'},
+						{type: 'bar'},
+						{type: 'bar'},
+						{type: 'bar'},
+						{type: 'bar'},
+						{type: 'bar'},
+						{type: 'bar'},
+						{type: 'bar'},
+						{type: 'bar'},
+						{type: 'bar'},
+						{type: 'bar'},
+						{type: 'bar'},
+						{type: 'bar'},
+						{type: 'bar'},
+						{type: 'bar'}
+
+
+					]
+				};
+
+			myChart.setOption(option);
+</script>
+        </div>
+
+        <div class="t_box">
+            <p style="font-size:18px ;color:#ffffff">疾病费用分析</p>
+    <div id="pp" style="width:850px;height:350px;"></div>
+            <script type="text/javascript">
+                var myChart = echarts.init(document.getElementById('pp'));
+                var seriesData = {{ ss|safe }};
+var legendData = {{ name|safe }}
+var colorList = ['#73DDFF', '#73ACFF', '#FDD56A', '#FDB36A', '#FD866A', '#9E87FF', '#58D5FF',"#8CFD6B",'#48FF4C',"#1334FD"];
+option = {
+    title: {
+        text: '疾病分析',
+        x: 'center',
+        y: 'center',
+        textStyle: {
+            color: '#fff'
+        }
+    },
+    tooltip: {
+        trigger: 'item',
+        borderColor: 'rgba(255,255,255,.3)',
+        backgroundColor: 'rgba(13,5,30,.6)',
+        borderWidth: 1,
+        padding: 5,
+        formatter: function(parms) {
+            var str = parms.marker + "" + parms.data.name + "</br>" +
+                "费用：" + parms.data.value + "元</br>" +
+                "占比：" + parms.percent + "%";
+            return str;
+        }
+    },
+    legend: {
+        type: "scroll",
+        orient: 'vertical',
+        left: 'left',
+        align: 'auto',
+        top: 'middle',
+        textStyle: {
+            color: '#fff'
+        },
+        data: legendData
+    },
+    series: [{
+        type: 'pie',
+        z: 3,
+        center: ['50%', '50%'],
+        radius: ['25%', '45%'],
+        clockwise: true,
+        avoidLabelOverlap: true,
+        hoverOffset: 15,
+        itemStyle: {
+            normal: {
+                color: function(params) {
+                    return colorList[params.dataIndex]
+                }
+            }
+        },
+        label: {
+            show: true,
+            position: 'outside',
+            formatter: '{a|{b}：{d}%}\n{hr|}',
+            rich: {
+                hr: {
+                    backgroundColor: 't',
+                    borderRadius: 3,
+                    width: 3,
+                    height: 3,
+                    padding: [3, 3, 0, -12]
+                },
+                a: {
+                    padding: [-30, 15, -20, 15]
+                }
+            }
+        },
+        labelLine: {
+            normal: {
+                length: 20,
+                length2: 30,
+                lineStyle: {
+                    width: 1
+                }
+            }
+        },
+        data: seriesData
+    }, {
+        name:'第一层环',
+        type: 'pie',
+        z: 2,
+        tooltip:{
+            show:false
+        },
+        center: ['50%', '50%'],
+        radius: ['45%', '58%'],
+        hoverAnimation: false,
+        clockWise: false,
+        itemStyle: {
+            normal: {
+                // shadowBlur: 40,
+                // shadowColor: 'rgba(0, 255, 255,.3)',
+                color: 'rgba(1,15,80,.4)',
+            },
+            emphasis:{
+                color: 'rgba(1,15,80,.4)',
+            }
+        },
+        label: {
+            show: false
+        },
+        data: [100]
+    }, {
+        name:'第二层环',
+        type: 'pie',
+        z: 1,
+        tooltip:{
+            show:false
+        },
+        center: ['50%', '50%'],
+        radius: ['58%', '76%'],
+        hoverAnimation: false,
+        clockWise: false,
+        itemStyle: {
+            normal: {
+                // shadowBlur: 40,
+                // shadowColor: 'rgba(0, 255, 255,.3)',
+                color: 'rgba(0,15,69,.2)',
+            },
+            emphasis:{
+                color: 'rgba(0,15,69,.2)',
+            }
+        },
+        label: {
+            show: false
+        },
+        data: [100]
+    }]
+};
+    			myChart.setOption(option);
+             </script>
+        </div>
+    </main>
+
+
+</div>
+</body>
+</html>

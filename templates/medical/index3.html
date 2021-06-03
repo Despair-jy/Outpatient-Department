@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>济南市医疗可视化平台</title>
+  <link rel="stylesheet" href="{% static 'css/index1.css' %}">
+  <link rel="stylesheet" href="{% static 'css/globle.css' %}">
+    <script src="{% static 'js/echarts.min.js' %}"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<style type="text/css">
+	body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+	</style>
+	<script type="text/javascript" src="//api.map.baidu.com/api?v=1.0&ak=NlqkbVOSWg8j79wk4WCPWEd0qm3TwAU5"></script>
+    <style>
+        .nav{
+        position=relative;
+
+
+        }
+        a{
+width: 8%;
+padding-top: 20px;
+padding-bottom: 20px;
+font-size: 30px;
+color: #fff;
+text-align: center;
+display: block;
+float: left;
+margin-left:200px;
+        }
+    </style>
+</head>
+<body>
+  <div class="main">
+    <div class="top_title">
+        <h1 align="center"style="color:#fff">济南医疗数据可视化平台</h1>
+    </div>
+
+<div class="nav">
+
+    <span><a href="http://127.0.0.1:8000/myapp/show/">指标分析</a><a href="http://127.0.0.1:8000/myapp/gl/">趋势分析</a><a href="http://127.0.0.1:8000/myapp/xy/%%20url%20'show'%20%"  >首页</a><a href="http://127.0.0.1:8000/myapp/hh/">疾病分析</a><a href="http://127.0.0.1:8000/myapp/zhunbei_predict/">就诊预测</a></span>
+
+</div>
+
+</script>
+    <div class="datas">
+      <div class="data_left">
+        <div class="left_top">
+          <div class="left_top_title">17,18年常见病症门诊数</div>
+
+      <div id="chart1"  style="width:450px;height:300px"></div>
+
+<script type="text/javascript">
+      {#初始化 echarts 对象#}
+    var mychart = echarts.init(document.getElementById('chart1'));
+    var option = {
+
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'shadow'
+        }
+    },
+    legend: {
+        data: ['2017年', '2018年'],
+        textStyle:{
+			color:"#4E72B0"
+		}
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis: {
+        type: 'value',
+        boundaryGap: [0, 0.01],
+        axisLine:{
+                        lineStyle:{
+                            color:'#4E72B0',
+                        }
+                    }
+
+
+    },
+    yAxis: {
+        type: 'category',
+        axisLine:{
+                        lineStyle:{
+                            color:'#4E72B0',
+                        }
+                    },
+        data: ['上呼吸道感染',
+'上呼吸道疾病',
+'丘疹性荨麻疹',
+'中耳炎',
+'发热',
+'变应性鼻炎',
+'呕吐',
+'呼吸道感染',
+'咳嗽',
+'哮喘']
+    },
+    series: [
+        {
+            name: '2017年',
+            type: 'bar',
+            data: [7675,
+4994,
+730,
+3394,
+25464,
+462,
+3730,
+6277,
+2809]
+        },
+        {
+            name: '2018年',
+            type: 'bar',
+            data: [8449,
+12406,
+5087,
+11148,
+124477,
+5147,
+11542,
+6604,
+52392,
+13983]
+        }
+    ]
+};
+    {#将 echarts对象与展示选项结合起来#}
+    mychart.setOption(option);
+
+</script>
+        </div>
+        <div class="left_bottom">
+          <div class="left_top_title">19，20年常见病症门诊数</div>
+         <div id="chart2"  style="width:450px;height:300px"></div>
+<script type="text/javascript">
+      {#初始化 echarts 对象#}
+    var mychart = echarts.init(document.getElementById('chart2'));
+
+
+    var option = {
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'shadow',
+
+
+        }
+    },
+    legend: {
+        data: ['2019年', '2020年'],
+        textStyle:{
+			color:"#4E72B0"
+		}
+
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+
+    },
+    xAxis: {
+        type: 'value',
+        boundaryGap: [0, 0.01],
+         axisLine:{
+                        lineStyle:{
+                            color:'#4E72B0',
+                        }
+                    },
+    },
+    yAxis: {
+        type: 'category',
+         axisLine:{
+                        lineStyle:{
+                            color:'#4E72B0',
+                        }
+                    },
+        data: ['上呼吸道感染',
+'上呼吸道疾病',
+'丘疹性荨麻疹',
+'中耳炎',
+'发热',
+'变应性鼻炎',
+'呕吐',
+'呼吸道感染',
+'咳嗽',
+'哮喘']
+    },
+    series: [
+        {
+            name: '2019年',
+            type: 'bar',
+            data: [10204,
+620,
+1557,
+3018,
+42410,
+2051,
+4219,
+4620,
+16988,
+5003]
+        },
+        {
+            name: '2020年',
+            type: 'bar',
+            data: [3219,
+89,
+589,
+380,
+3365,
+1166,
+911,
+1912,
+1153,
+2305]
+        }
+    ]
+};
+
+    {#将 echarts对象与展示选项结合起来#}
+    mychart.setOption(option);
+
+
+
+</script>
+        </div>
+      </div>
+      <div class="data_middle">
+        <div class="middle_top">
+          <div class="middle_top_list">
+            <div class="list_title">第四人民医院现有科室数</div>
+            <div class="list_num list_num1"><span class="counter-value">26</span>个</div>
+<!--           <div class="today_list_font">今日最新发布<span>12</span>条</div>-->
+          </div>
+          <div class="middle_top_list">
+              <div class="list_title">四年累计就诊人数</div>
+              <div class="list_num list_num2"><span class="counter-value">274.6303</span>万</div>
+            {#  <div class="today_list_font">今日最新交易<span>0.2</span>亿</div>#}
+          </div>
+          <div class="middle_top_list">
+              <div class="list_title">济南市儿童医院现有科室数</div>
+              <div class="list_num list_num3"><span class="counter-value">28</span>个</div>
+            {#   <div class="today_list_font">今日交易面积<span>1.5</span>万亩</div>#}
+          </div>
+        </div>
+          <div id="main" style="width:700px;height:600px;"></div>
+
+          <script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&ak=mpL9c9Ry83KUDs36WNBHaniTHo8WKk1S"></script>
+<script type="text/javascript">
+<!--	// 百度地图API功能-->
+
+<!--	var map = new BMap.Map("main");    // 创建Map实例-->
+<!--	map.centerAndZoom(new BMap.Point(117.16462, 36.66416), 11);  // 初始化地图,设置中心点坐标和地图级别-->
+<!--	//添加地图类型控件-->
+<!--	map.enableScrollWheelZoom();     //开启鼠标滚轮缩放-->
+<!--	map.addControl(new BMap.MapTypeControl({-->
+<!--		mapTypes:[-->
+<!--            BMAP_NORMAL_MAP,-->
+<!--            BMAP_HYBRID_MAP-->
+<!--        ]}));-->
+
+<!--        var mark =new BMap.marker(new BMap.Point(117.16462, 36.66416))-->
+<!--        map.addOverlay(mark)-->
+
+<!--    var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件-->
+
+<!--        map.addControl(top_left_navigation);-->
+<!--        var traffic = new BMap.TrafficLayer();-->
+<!--        map.addTileLayer(traffic);-->
+<!--	map.setCurrentCity("济南");          // 设置地图显示的城市 此项是必须设置的-->
+<!--	map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放-->
+
+
+
+	    var map = new BMap.Map("main");
+    var point = new BMap.Point(116.986018,36.700814);
+    map.centerAndZoom(point, 17);
+    var marker = new BMap.Marker(point);
+    map.addOverlay(marker);
+	//添加地图类型控件
+	map.addControl(new BMap.MapTypeControl({
+		mapTypes:[
+            BMAP_NORMAL_MAP,
+            BMAP_HYBRID_MAP
+        ]}));
+	map.setCurrentCity("济南市第四人民医院");          // 设置地图显示的城市 此项是必须设置的
+	map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+
+
+
+
+
+</script>
+      </div>
+      <div class="data_right">
+        <div class="right_top">
+          <div class="left_top_title">19年平均门诊费用前十</div>
+            <div id="chart3"  style="width:600px;height:350px"></div>
+            <script type="text/javascript">
+
+    var mychart = echarts.init(document.getElementById('chart3'));
+
+
+    var option = {
+    xAxis: {
+        type: 'category',
+          axisLine:{
+                        lineStyle:{
+                            color:'#4E72B0',
+                        }
+                    },
+        data: ['失血性休克',
+'心源性猝死',
+'头部多处开放性伤口',
+'代谢性酸中毒',
+'心律失常电风暴',
+'化疗后恢复期',
+'急性心肌梗死',
+'腹腔感染',
+'下肢缺血',
+'下肢单瘫']
+    },
+    yAxis: {
+        type: 'value',
+          axisLine:{
+                        lineStyle:{
+                            color:'#4E72B0',
+                        }
+                    },
+    },
+    series: [{
+        data: [7984.9,
+4614.29,
+4270.43,
+3843.15,
+3383.54,
+3353,
+2973.15,
+2685.26,
+2471.18,
+2399.2],
+        type: 'bar',
+
+    }],
+        tooltip : {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                label: {
+                    backgroundColor: '#6a7985'
+                }
+            }
+        }
+};
+    mychart.setOption(option);
+
+
+
+</script>
+        </div>
+        <div class="right_bottom">
+          <div class="left_top_title">20年部分疾病平均门诊数</div>
+          <div id="chart4"  style="width:600px;height:350px"></div>
+            <script type="text/javascript">
+
+    var mychart = echarts.init(document.getElementById('chart4'));
+
+
+    var option = {
+    xAxis: {
+        type: 'category',
+         axisLine:{
+                        lineStyle:{
+                            color:'#4E72B0',
+                        }
+                    },
+        data: ['上臂损伤',
+'新生儿高胆红素血症',
+'喘病',
+'中央型房间隔缺损卵圆孔型',
+'便秘',
+'女性更年期综合征',
+'低蛋白血症',
+'颈椎退行性病变',
+'急性淋巴结炎',
+'心动过速',
+'宫颈上皮瘤样病变[CIN]II级',
+'乙状结肠息肉',
+'慢性肾功能不全',
+'三尖瓣成形术后',
+'盘状半月板先天性',
+]
+    },
+    yAxis: {
+         axisLine:{
+                        lineStyle:{
+                            color:'#4E72B0',
+                        }
+                    },
+        type: 'value'
+    },
+    series: [{
+        data: [602.59,
+265.5115,
+596.708,
+324.0946,
+302.70844,
+974.7,
+1437.7999,
+400.05,
+340.1321,
+269.02765,
+18,
+272.205,
+430.50845,
+21,
+176.965,],
+
+        type: 'line'
+    }],
+
+          tooltip : {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                label: {
+                    backgroundColor: '#6a7985'
+                }
+            }
+        }
+};
+
+    mychart.setOption(option);
+
+
+
+</script>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

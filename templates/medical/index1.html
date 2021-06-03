@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <title>趋势分析</title>
+<!--    <script src="{% static 'js/jquery-2.2.1.min.js' %}"></script>-->
+    <script src="{% static 'js/rem.js' %}"></script>
+    <script src="{% static 'js/echarts.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/echarts.min.js' %}"></script>
+   <script src="{% static 'js/jquery-2.2.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/echarts-wordcloud.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/nane_dingwei.js' %}"></script>
+    <style>
+        .nav{
+        position=relative;
+
+
+        }
+        a{
+width: 8%;
+padding-top: 10px;
+font-size: 30px;
+color: #fff;
+text-align: center;
+display: block;
+float: left;
+margin-left:180px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="t_container">
+    <header class="t_h_bg">
+<div class="nav">
+    <span><a href="http://127.0.0.1:8000/myapp/xy/%%20url%20'show'%20%"  >首页</a><a href="http://127.0.0.1:8000/myapp/show/">指标分析</a><a href="http://127.0.0.1:8000/myapp/gl/">趋势分析</a><a href="http://127.0.0.1:8000/myapp/hh/">疾病分析</a><a href="http://127.0.0.1:8000/myapp/zhunbei_predict/">就诊预测</a></span>
+</div>
+
+    </header>
+    <main class="t_main">
+        <div class="t_box">
+
+            <div class="zhutu" style="font-size:12px">
+{#                <header class="t_title">#}
+{#                    <span>历年疾病TOP10排行</span>#}
+{#                </header>#}
+                <p style="font-size:4px ;color:#ffffff">历年疾病TOP10排行</p>
+                <form action="{% url 'gl' %}" method="post">
+                    {#            <fieldset>#}
+                    <b style="color: #ffffff">年份</b>
+                    <select name="year" style="font-size:5px" id="year" >
+                        <option value="2017年" >2017年</option>
+                        <option value="2018年" >2018年</option>
+                        <option value="2019年">2019年</option>
+                    </select>
+                    {#            </fieldset>#}
+                    {#            <fieldset>#}
+                    <b style="color: #ffffff">月份</b>
+                    <select name="month" style="font-size:5px" id="month">
+                        <option value="1月">1月</option>
+                        <option value="2月">2月</option>
+                        <option value="3月">3月</option>
+                        <option value="4月">4月</option>
+                        <option value="5月">5月</option>
+                        <option value="5月">5月</option>
+                        <option value="6月">6月</option>
+                        <option value="7月">7月</option>
+                        <option value="8月">8月</option>
+                        <option value="9月">9月</option>
+                        <option value="10月">10月</option>
+                        <option value="11月">11月</option>
+                        <option value="12月">12月</option>
+                    </select>
+                    {#            </fieldset>#}
+                    <input type="submit" style="font-size:5px" value="查询">
+                    {#            </fieldset>#}
+                </form>
+            </div>
+            {#    top10排名#}
+            <div class="ss" style="width:760px;height:400px;" id="main">
+
+            </div>
+            <script type="text/javascript">
+                var myChart = echarts.init(document.getElementById('main'));
+
+                myChart.setOption({
+                    {#title:{#}
+                    {#    text:"每年每月的疾病TOP10排行",#}
+                    {#    textAlign:'center',#}
+                    {##}
+
+                    grid: {
+                        left: '5%',
+                        right: '5%',
+                        bottom: '5%',
+                        top: '10%',
+                        containLabel: true
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        textStyle: {
+                            fontSize: 13
+                        },
+                        axisPointer: {
+                            type: 'none'
+                        },
+                        formatter: function (params) {
+                            return params[0].name + '<br/>' +
+                                "<span style='display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:rgba(36,207,233,0.9)'></span>" +
+                                params[0].seriesName + ' : ' + Number((params[0].value.toFixed(4) / 1).toFixed(2)).toLocaleString() + ' 例<br/>'
+                        }
+                    },
+                    {#backgroundColor: 'rgb(30,52,158)',#}
+                    xAxis: {
+                        show: false,
+                        type: 'value'
+                    },
+                    yAxis: [{
+                        type: 'category',
+                        inverse: true,
+                        axisLabel: {
+                            show: true,
+                            textStyle: {
+                                color: '#fff',
+                                fontSize: 13
+                            },
+                        },
+                        splitLine: {
+                            show: false
+                        },
+                        axisTick: {
+                            show: false
+                        },
+                        axisLine: {
+                            show: false
+                        },
+                        data: {{ name|safe }}
+                    },
+                        {
+                            type: 'category',
+                            inverse: true,
+                            axisTick: 'none',
+                            axisLine: 'none',
+                            show: true,
+                            axisLabel: {
+                                textStyle: {
+                                    color: '#ffffff',
+                                    fontSize: 13
+                                },
+                                formatter: function (value) {
+
+                                    return value.toLocaleString() + '例';
+
+                                },
+                            },
+                            data: {{ value|safe }}
+                        }],
+                    series: [{
+                        name: '总数',
+                        type: 'bar',
+                        zlevel: 1,
+                        itemStyle: {
+                            normal: {
+                                barBorderRadius: 30,
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{
+                                    offset: 0,
+                                    color: 'rgb(57,89,255,1)'
+                                }, {
+                                    offset: 1,
+                                    color: 'rgb(46,200,207,1)'
+                                }]),
+                            },
+                        },
+                        barWidth: 10,
+                        data: {{ value|safe }}
+                    },
+                        {
+                            name: '背景',
+                            type: 'bar',
+                            barWidth: 8,
+                            barGap: '-100%',
+                            data: {{ value|safe }},
+                            itemStyle: {
+                                normal: {
+                                    color: 'rgba(24,31,68,1)',
+                                    barBorderRadius: 30,
+                                }
+                            },
+                        },
+                    ]
+                });
+
+
+            </script>
+
+            </header>
+        </div>
+
+
+        <div class="t_box">
+
+                <div class="panel-body" style="width: 740px;height:330px;">
+                    <div id="worldCloud" style="height:400px;"></div>
+               
+            </div>
+            <script type="text/javascript">
+                var worldCloudcharts = echarts.init(document.getElementById('worldCloud'));
+                var worldCloudoption = {
+                    title: {
+                        text: '历年疾病聚焦',
+                        x: 'center',
+                        textStyle: {
+                            fontSize: 18,
+                            color: '#FFFFFF'
+                        }
+
+                    },
+                    tooltip: {
+                        show: true,
+                        textStyle: {
+                            fontSize: 13
+                        },
+                    },
+                    series: [{
+                        {#name: '研发部邮件主题分析',#}
+                        type: 'wordCloud',
+                        sizeRange: [6, 66],
+                        rotationRange: [-45, 90],
+                        textPadding: 0,
+                        autoSize: {
+                            enable: true,
+                            minSize: 6
+                        },
+                        textStyle: {
+                            normal: {
+                                color: function () {
+                                    return 'rgb(' + [
+                                        Math.round(Math.random() * 160),
+                                        Math.round(Math.random() * 160),
+                                        Math.round(Math.random() * 160)
+                                    ].join(',') + ')';
+                                }
+                            },
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowColor: '#292929'
+                            }
+                        },
+
+                    }]
+                };
+
+                var JosnList ={{ year_disease|safe }};
+
+
+                worldCloudoption.series[0].data = JosnList;
+
+                worldCloudcharts.setOption(worldCloudoption);
+            </script>
+        </div>
+
+
+        <div class="t_box">
+{#            <header class="t_title">#}
+{#                <span>历年慢性病趋势图</span>#}
+{#            </header>#}
+              <p style="font-size:18px ;color:#ffffff">历年慢性病趋势图</p>
+            <div id="hospital" style="height:350px;"></div>
+            <script type="text/javascript">
+                var Mychart = echarts.init(document.getElementById("hospital"));
+
+                option = {
+                    title: {
+
+                        top: '5%',
+                        left: 'center',
+                    },
+                    legend: {
+                        show: true,
+                        icon: "rect",
+                        itemWidth: 14,
+                        itemHeight: 5,
+                        itemGap: 10,
+                        right: "35%",
+                        top: 0,
+                        textStyle: {
+                            fontSize: 15,
+                            color: "#ccc"
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        textStyle: {
+                            fontSize: 20
+                        },
+                        axisPointer: {
+                            lineStyle: {
+                                color: {
+                                    type: 'linear',
+                                    x: 0,
+                                    y: 0,
+                                    x2: 0,
+                                    y2: 1,
+                                    colorStops: [{
+                                        offset: 0,
+                                        color: 'rgba(0, 255, 233,0)'
+                                    }, {
+                                        offset: 0.5,
+                                        color: 'rgba(255, 255, 255,1)',
+                                    }, {
+                                        offset: 1,
+                                        color: 'rgba(0, 255, 233,0)'
+                                    }],
+                                    global: false
+                                }
+                            },
+                        },
+                    },
+                    grid: {
+                        top: '15%',
+                        left: '5%',
+                        right: '5%',
+                        bottom: '15%',
+                        // containLabel: true
+                    },
+                    xAxis: [{
+                        type: 'category',
+                        axisLine: {
+                            show: true
+                        },
+                        splitArea: {
+                            // show: true,
+                            color: '#f00',
+                            lineStyle: {
+                                color: '#f00'
+                            },
+                        },
+                        axisLabel: {
+                            color: '#fff',
+                            textStyle: {
+                                fontSize: 13
+                            }
+                        },
+                        splitLine: {
+                            show: false
+                        },
+                        boundaryGap: false,
+                        data: ['2017年', '2018年', '2019年', '2020年'],
+                    }],
+
+                    yAxis: [{
+                        type: 'value',
+                        min: 0,
+                        max: 50000,
+                        splitNumber: 4,
+
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                                color: 'rgba(255,255,255,0.1)',
+
+                            }
+                        },
+                        axisLine: {
+                            show: false,
+                        },
+                        axisLabel: {
+                            show: true,
+                            margin: 10,
+                            textStyle: {
+                                color: '#d1e6eb',
+                                fontSize: 10
+                            },
+                        },
+                        axisTick: {
+                            show: false,
+                        },
+                    }],
+                    series: [{
+                        name: '高血压',
+                        type: 'line',
+                        smooth: true, //是否平滑
+                        showAllSymbol: false,
+                        // symbol: 'image://./static/images/guang-circle.png',
+                        symbol: 'circle',
+                        symbolSize: 2,
+                        lineStyle: {
+                            normal: {
+                                color: "#00b3f4",
+                            },
+                        },
+                        itemStyle: {
+                            color: "#00b3f4",
+                        },
+                        tooltip: {
+                            show: true
+                        },
+
+                        data: {{ gaoxueya_value|safe }}
+                    },
+
+                        {
+                            name: '糖尿病',
+                            type: 'line',
+                            smooth: true, //是否平滑
+                            showAllSymbol: false,
+                            // symbol: 'image://./static/images/guang-circle.png',
+                            symbol: 'circle',
+                            symbolSize: 2,
+                            lineStyle: {
+                                normal: {
+                                    color: "#00ca95",
+                                },
+                            },
+                            itemStyle: {
+                                color: "#00ca95",
+                            },
+                            tooltip: {
+                                show: true
+                            },
+                            data: {{ tang_value|safe }},
+                        }, {
+                            name: '脑梗死',
+                            type: 'line',
+                            smooth: true, //是否平滑
+                            showAllSymbol: false,
+                            // symbol: 'image://./static/images/guang-circle.png',
+                            symbol: 'circle',
+                            symbolSize: 2,
+                            lineStyle: {
+                                normal: {
+                                    color: "#E9BC5C",
+                                },
+                            },
+                            itemStyle: {
+                                color: "#E9BC5C",
+                            },
+                            tooltip: {
+                                show: true
+                            },
+                            data:{{ naogeng|safe }},
+                        }, {
+                            name: '高脂血症',
+                            type: 'line',
+                            smooth: true, //是否平滑
+                            showAllSymbol: false,
+                            // symbol: 'image://./static/images/guang-circle.png',
+                            symbol: 'circle',
+                            symbolSize: 2,
+                            lineStyle: {
+                                normal: {
+                                    color: "#9A65B9",
+                                },
+                            },
+                            itemStyle: {
+                                color: "#9A65B9",
+                            },
+                            tooltip: {
+                                show: true
+                            },
+                            data:{{ xuezhi_value|safe }},
+                        },
+                    ]
+                };
+
+
+                Mychart.setOption(option);
+            </script>
+
+        </div>
+
+        <div class="t_box">
+{#            <header class="t_title">#}
+{#                <span>历年医院疾病top10排名</span>#}
+{#            </header>#}
+            <p style="font-size:15px ;color:#ffffff">肺部疾病四季发病趋势</p>
+            {#2018年2017年医院top10#}
+<div id="container" style="height:370px"></div>
+
+<script type="text/javascript">
+     var myChart = echarts.init(document.getElementById('container'));
+      option = {
+<!--    backgroundColor: '#fff',-->
+    title: {
+        text: "发病数（个）",
+        left: "18px",
+        top: "0",
+        textStyle: {
+            color: "#fff",
+            fontSize: 12,
+            fontWeight: '400'
+        }
+    },
+    color: ['#73A0FA', '#73DEB3', '#FFB761', '#bda29a', '#a8d8ea'],
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'cross',
+            crossStyle: {
+                color: '#999'
+            },
+            lineStyle: {
+                type: 'dashed'
+            }
+        }
+    },
+    grid: {
+        left: '25',
+        right: '25',
+        bottom: '24',
+        top: '75',
+        containLabel: true
+    },
+    legend: {
+        data: ['发热', '支气管炎', '肺炎','咳嗽','急性上呼吸道感染'],
+        orient: 'horizontal',
+        icon: "rect",
+        show: true,
+        left: 20,
+        top: 25,
+        textStyle: {
+               color: '#fff'
+            },
+
+    },
+    xAxis: {
+        type: 'category',
+        data: ['春季','夏季','秋季','冬季'],
+            axisLabel: {
+            color: '#fff',
+
+        },
+
+        splitLine: {
+            show: false
+        },
+        axisTick: {
+            show: false
+        },
+        axisLine: {
+            show: false
+        },
+    },
+    yAxis: {
+        type: 'value',
+        // max: max_value>=100? max_value + 100: max_value+10,
+        // max: max_value > 100 ? max_value * 2 : max_value + 10,
+        // interval: 10,
+        // nameLocation: "center",
+        axisLabel: {
+            color: '#fff',
+            textStyle: {
+                fontSize: 12
+            },
+        },
+        splitLine: {
+            show: true,
+            lineStyle: {
+                color: '#F3F4F4'
+            }
+        },
+        axisTick: {
+            show: false
+        },
+        axisLine: {
+            show: false
+        },
+    },
+    series: [{
+            name: '发热',
+            type: 'line',
+            smooth: true,
+            data: {{count5|safe}}
+        },
+        {
+            name: '支气管炎',
+            type: 'line',
+            smooth: true,
+            data: {{count6|safe}}
+        },
+        {
+            name: '肺炎',
+            type: 'line',
+            smooth: true,
+            data: {{count7|safe}}
+        },
+        {
+            name: '咳嗽',
+            type: 'line',
+            smooth: true,
+            data: {{count8|safe}}
+        },
+        {
+            name: '急性上呼吸道感染',
+            type: 'line',
+            smooth: true,
+            data: {{count9|safe}}
+        }
+    ]
+};
+     myChart.setOption(option);
+</script>
+        </div>
+    </main>
+
+
+</div>
+</body>
+</html>
